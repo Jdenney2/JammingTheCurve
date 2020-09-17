@@ -4,7 +4,15 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    //Physics variables, for now they are random, and will need a great deal of tuning
     public float speed = 1.0f;
+    public float jumpForce = 40.0f;
+
+    //Logic variables
+
+    //References
+
+    //Components
     private Rigidbody myRigidbody;
 
     // Start is called before the first frame update
@@ -23,7 +31,7 @@ public class PlayerController : MonoBehaviour
         myRigidbody.AddForce(movement * speed);
 
         if (Input.GetButtonDown("Jump")) {
-            //myRigidbody.AddForce(new Vector3)
+            myRigidbody.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
         }
     }
 }
