@@ -5,34 +5,54 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     //Physics variables, for now they are random, and will need a great deal of tuning
-    public float speed = 1.0f;
-    public float jumpForce = 40.0f;
+    public float speed = 2.0f;
+    public float gravity = 9.0f;
+    public float jumpSpeed = 10.0f;
+    public float rotateSpeed = 3.0f;
+    private float cameraAngle;
+    public float maxCameraRotation = 50.0f;
+    private float moveDirY;
+    Vector3 moveDirection = Vector3.zero;
 
     //Logic variables
+    public bool isGrounded;
 
     //References
+    public GameObject pivotPoint;
 
     //Components
-    private Rigidbody myRigidbody;
+    private CharacterController charController;
 
     // Start is called before the first frame update
     void Start()
     {
-        myRigidbody = GetComponent<Rigidbody>();
+        charController = GetComponent<CharacterController>();
+        cameraAngle = 0;
+        moveDirY = 0;
     }
 
-    void FixedUpdate()
-    {
-        float moveH = Input.GetAxis ("Horizontal");
-        float moveV = Input.GetAxis ("Vertical");
+    void Update()
+    {        
+//Handle Player Horizontal Rotation
+        transform.Rotate(0, Input.GetAxis("Mouse X") * rotateSpeed, 0);
 
-        Vector3 movement = new Vector3(moveH, 0.0f, moveV);
-        Vector3.Normalize(movement);
+        //Handle Camera Vertical Rotation
+        cameraAngle += -Input.GetAxis("Mouse Y") * rotateSpeed;
+        cameraAngle = Mathf.Clamp(cameraAngle, -maxCameraRotation, maxCameraRotation);
+        pivotPoint.transform.localRotation = Quaternion.AngleAxis(cameraAngle, Vector3.right);
 
-        myRigidbody.AddForce(movement * speed);
+        //Handle Character Movement
+        moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        moveDirection *= speed;
 
-        if (Input.GetButtonDown("Jump")) {
-            myRigidbody.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
+        if (charController.isGrounded  && Input.GetButtonDown("Jump")) {
+            moveDirY = jumpSpeed;
         }
+
+        moveDirection = transform.TransformDirection(moveDirection);
+        moveDirY -= gravity * Time.deltaTime;
+        moveDirection.y = moveDirY;
+
+        charController.Move(moveDirection * Time.deltaTime);
     }
 }
