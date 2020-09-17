@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1ef29c4fd3d1344498eaaef9ce5df610
+guid: b5134b85dbd234c458c6ba81edc19974
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
@@ -7,22 +7,12 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: DoorHandle
-    second: {fileID: 2100000, guid: faad3690e580eb24fb1b41d2083f382d, type: 2}
+      name: Banana
+    second: {fileID: 2100000, guid: 71de8ba9f0f31b04f9f4ae45b03ddbdf, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: No Name
-    second: {fileID: 2100000, guid: bbafd4c411814e64ca8c5d50f5c43ea7, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Stand
-    second: {fileID: 2100000, guid: faad3690e580eb24fb1b41d2083f382d, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Wood
+      name: BananaTop
     second: {fileID: 2100000, guid: 39ead9f608fdc6c4083a79d0ffa5f10a, type: 2}
   materials:
     materialImportMode: 1
