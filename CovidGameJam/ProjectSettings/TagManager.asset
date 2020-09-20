@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - NPC
+  - Object
+  - NonNPC
   layers:
   - Default
   - TransparentFX
