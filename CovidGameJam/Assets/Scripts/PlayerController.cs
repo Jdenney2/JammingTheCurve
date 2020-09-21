@@ -43,6 +43,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {        
+        if(charController.isGrounded)
+            moveDirY = -9f;
 
         //Handle Camera Vertical Rotation
         cameraAngle += -Input.GetAxis("Mouse Y") * rotateSpeed;

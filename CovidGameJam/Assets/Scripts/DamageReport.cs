@@ -32,15 +32,13 @@ public class DamageReport : MonoBehaviour
 
         objs = GameObject.FindGameObjectsWithTag("NPC");
 
-        Debug.Log("length of ppl " + objs.Length);
-
-        // foreach(GameObject go in objs)
-        // {
-        //     if(go.GetComponent<NPCStarts>().isInfected == true)
-        //     {
-        //         PI++;
-        //     }
-        // }
+        foreach(GameObject go in objs)
+        {
+            if(go.GetComponent<NPCStarts>().isInfected == true)
+            {
+                PI++;
+            }
+        }
     }
 
     private void CalculateObjects()
@@ -48,8 +46,6 @@ public class DamageReport : MonoBehaviour
         GameObject[] objs;
 
         objs = GameObject.FindGameObjectsWithTag("Object");
-
-        Debug.Log("length of objs " + objs.Length);
 
         foreach(GameObject go in objs)
         {
