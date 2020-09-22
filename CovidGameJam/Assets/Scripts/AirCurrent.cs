@@ -19,9 +19,27 @@ public class AirCurrent : MonoBehaviour
     void Update()
     {
         
-        if(moveUp == true)
+        if(moveUp)
         {
             StartCoroutine(Delay());
+            playerVelocity.y += Mathf.Lerp(min, max, t);
+            t += 0.5f * Time.deltaTime;
+            controller.Move(playerVelocity * Time.deltaTime);
+
+            if(t >= 0.3f)
+            {
+                float temp;
+                temp = min;
+                min = max;
+                max = temp;
+                t = 0.0f;
+            }
+        }
+
+        if(moveOut)
+        {
+            StartCoroutine(Delay());
+            playerVelocity.z -= Mathf.Lerp(min, max, t);
             playerVelocity.y += Mathf.Lerp(min, max, t);
             t += 0.5f * Time.deltaTime;
             controller.Move(playerVelocity * Time.deltaTime);
@@ -44,6 +62,12 @@ public class AirCurrent : MonoBehaviour
             playerVelocity.y = 0.0f;
             moveUp = true;
         }
+
+        if(other.tag =="Player" && outward == true)
+        {
+            playerVelocity.y = 0.0f;
+            moveOut = true;
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -62,11 +86,6 @@ public class AirCurrent : MonoBehaviour
     {
         yield return new WaitForSeconds(seconds);
         moveUp = false;
-        // playerVelocity.y = 0.0f;
-        // float temp;
-        // temp = max;
-        // max = min;
-        // min = temp;
-        // t = 0.0f;
+        moveOut = false;
     }
 }
