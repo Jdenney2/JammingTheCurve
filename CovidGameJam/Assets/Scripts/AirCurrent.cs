@@ -4,16 +4,20 @@ using UnityEngine;
 
 public class AirCurrent : MonoBehaviour
 {
-    public float force, gravityValue, t = 0.0f, min, max, seconds;
-    public bool up, outward;
-    private bool moveUp, moveOut;
+    public float gravityValue, min, max, seconds;
+    private float t = 0.5f;
+    public bool up, outX, outZ, D; //D = direction if true then forward if false then backward
+    private bool moveUp, outwardZ, outwardX; //x and z are their own axis F = forward B = backward
     public CharacterController controller;
     private Vector3 playerVelocity;
+    public PlayerController script;
 
     void Start()
     {
         moveUp = false;
-        moveOut = false;
+        outwardZ = false;
+        outwardX = false;
+    
     }
 
     void Update()
@@ -22,37 +26,22 @@ public class AirCurrent : MonoBehaviour
         if(moveUp)
         {
             StartCoroutine(Delay());
+
+            script.TurnGravity();
+
             playerVelocity.y += Mathf.Lerp(min, max, t);
             t += 0.5f * Time.deltaTime;
-            controller.Move(playerVelocity * Time.deltaTime);
 
-            if(t >= 0.3f)
-            {
-                float temp;
-                temp = min;
-                min = max;
-                max = temp;
-                t = 0.0f;
-            }
+            controller.Move(playerVelocity * Time.deltaTime);
         }
 
-        if(moveOut)
-        {
-            StartCoroutine(Delay());
-            playerVelocity.z -= Mathf.Lerp(min, max, t);
-            playerVelocity.y += Mathf.Lerp(min, max, t);
-            t += 0.5f * Time.deltaTime;
-            controller.Move(playerVelocity * Time.deltaTime);
+        if(outwardZ)
+            LaunchZ();
+        
 
-            if(t >= 0.3f)
-            {
-                float temp;
-                temp = min;
-                min = max;
-                max = temp;
-                t = 0.0f;
-            }
-        }
+        if(outwardX)
+            LaunchX();
+        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -63,29 +52,67 @@ public class AirCurrent : MonoBehaviour
             moveUp = true;
         }
 
-        if(other.tag =="Player" && outward == true)
+        if(other.tag =="Player" && outZ == true)
         {
             playerVelocity.y = 0.0f;
-            moveOut = true;
+            outwardZ = true;
+        }
+
+        if(other.tag =="Player" && outX == true)
+        {
+            playerVelocity.y = 0.0f;
+            outwardX = true;
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void LaunchZ()
     {
-        if(other.tag =="Player")
-        {
-            float temp;
-            temp = min;
-            min = max;
-            max = temp;
-            t = 0.0f;
-        }        
+        StartCoroutine(Delay());
+
+        //launch forward along z axis
+        if(D)
+            playerVelocity.z -= Mathf.Lerp(min, max, t);
+        
+
+        //launch backward along the z axis
+        if(!D)
+            playerVelocity.z += Mathf.Lerp(min, max, t);           
+        
+
+        t += 0.5f * Time.deltaTime;
+        controller.Move(playerVelocity * Time.deltaTime);
+    }
+
+    private void LaunchX()
+    {
+        StartCoroutine(Delay());
+
+        //launch left along x axis
+        if(D)
+            playerVelocity.x -= Mathf.Lerp(min, max, t);
+        
+
+        //launch right along the x axis
+        if(!D)
+            playerVelocity.x += Mathf.Lerp(min, max, t);           
+        
+
+        t += 0.5f * Time.deltaTime;
+        controller.Move(playerVelocity * Time.deltaTime);
     }
 
     private IEnumerator Delay()
     {
         yield return new WaitForSeconds(seconds);
         moveUp = false;
-        moveOut = false;
+        outwardZ = false;
+        outwardX = false;
+
+        // //reset everything so player can ride current again
+         t = 0.5f;
+        // float temp;
+        // temp = min;
+        // min = max;
+        // max = temp;
     }
 }

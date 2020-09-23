@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     Vector3 moveDirection = Vector3.zero;
 
     //Logic variables
-    private bool isGrounded;
+    private bool isGrounded, gravityOn;
     private bool isAttacking;
 
     //References
@@ -44,6 +44,11 @@ public class PlayerController : MonoBehaviour
     void Update()
     {        
         if(charController.isGrounded)
+            gravityOn = true;
+        else
+            gravityOn = false;
+
+        if(gravityOn)
             moveDirY = -9f;
 
         //Handle Camera Vertical Rotation
@@ -114,6 +119,11 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    public void TurnGravity()
+    {
+        gravityOn = !gravityOn;
+    }
+    
     private void OnTriggerEnter(Collider other) {
         if (other.gameObject.tag == "NPC" && !other.gameObject.GetComponent<NPCStarts>().isInfected) {
             target = other.gameObject;
