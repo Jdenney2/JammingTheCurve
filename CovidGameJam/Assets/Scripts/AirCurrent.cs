@@ -89,12 +89,12 @@ public class AirCurrent : MonoBehaviour
 
         //launch left along x axis
         if(D)
-            playerVelocity.x -= Mathf.Lerp(min, max, t);
+            playerVelocity.x += Mathf.Lerp(min, max, t);
         
 
         //launch right along the x axis
         if(!D)
-            playerVelocity.x += Mathf.Lerp(min, max, t);           
+            playerVelocity.x -= Mathf.Lerp(min, max, t);           
         
 
         t += 0.5f * Time.deltaTime;

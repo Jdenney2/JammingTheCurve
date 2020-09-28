@@ -17,8 +17,13 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: No Name
+      name: GlassDoor
     second: {fileID: 2100000, guid: bbafd4c411814e64ca8c5d50f5c43ea7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: No Name
+    second: {fileID: 2100000, guid: 8ccb962cd5f393a4ba5009eba62d0994, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
