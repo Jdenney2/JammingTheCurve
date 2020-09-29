@@ -2369,6 +2369,7 @@ GameObject:
   - component: {fileID: 78934150}
   - component: {fileID: 78934151}
   - component: {fileID: 78934148}
+  - component: {fileID: 78934149}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2394,6 +2395,20 @@ CharacterController:
   m_SkinWidth: 0.008
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &78934149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 78934147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31697c9c2c537724f91347804e346752, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  len: 20
+  shieldStr: {fileID: 2019049517}
 --- !u!4 &78934150
 Transform:
   m_ObjectHideFlags: 0
@@ -23214,7 +23229,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInfected: 0
   defense: 0
-  hasMask: 1
+  hasMask: 0
   head: {fileID: 1567284663}
 --- !u!135 &1043885044
 SphereCollider:
@@ -29441,7 +29456,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInfected: 0
-  defense: 0
+  defense: 60
   hasMask: 1
   head: {fileID: 1846723087}
 --- !u!4 &1296563737 stripped
@@ -44289,6 +44304,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da95d851b363f564dae71be714d60d52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stats: {fileID: 1296563736}
 --- !u!1 &2110289611
 GameObject:
   m_ObjectHideFlags: 0
@@ -45094,7 +45110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInfected: 0
   defense: 0
-  hasMask: 1
+  hasMask: 0
   head: {fileID: 573048325}
 --- !u!135 &2130500654
 SphereCollider:
