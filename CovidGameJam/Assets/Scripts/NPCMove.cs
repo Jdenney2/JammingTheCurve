@@ -11,28 +11,35 @@ public class NPCMove : MonoBehaviour
     public Transform allSpots;
     private List<Transform> spots = new List<Transform>();
     public NavMeshAgent agent;
+    public bool stationary = false, isIdle;
+    private Animator animator;
 
-    
-    //***I had to modify this script because I wrote it to inherit from another but the functionality is there. 
-    //just need to add what you need to update
     void Start()
     {
+        animator = GetComponent<Animator>();
+        
         dice = Random.Range(min, max);
         count = Mathf.RoundToInt(dice);
 
         for(int i = 0; i < allSpots.childCount; i++)
         {
-            /// All your stuff with transform.GetChild(i) here...
             spots.Add(allSpots.GetChild(i));
         }
     }
 
+    //if stationary is clicked then the npc does not move
     void Update()
     {
-        Move();
+        if(!stationary)
+            Move();
+        else
+        {
+            isIdle = true;
+            animator.SetBool("isIdle", isIdle);
+        }
     }
 
-    //move method iterates through list of transforms called spots
+    //move method iterates through list of transforms called spots 
     //uses count to do so
     //count is a random number
     public void Move()

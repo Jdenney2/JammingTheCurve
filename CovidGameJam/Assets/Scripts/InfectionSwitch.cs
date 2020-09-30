@@ -6,15 +6,21 @@ public class InfectionSwitch : MonoBehaviour
 {
     public bool infected = false;
 
-    // Start is called before the first frame update
-    void Start()
+    private void OnTriggerEnter(Collider other)
     {
-        
-    }
+        if(other.tag == "Employee")
+        {
+            infected = false;
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if(other.tag == "Player")
+        {
+            infected = true;
+        }
+
+        if(other.tag == "NPC" && other.GetComponent<NPCStarts>().isInfected == true)
+        {
+            infected = true;
+        }
     }
 }

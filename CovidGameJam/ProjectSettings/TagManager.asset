@@ -6,7 +6,7 @@ TagManager:
   tags:
   - NPC
   - Object
-  - NonNPC
+  - Employee
   layers:
   - Default
   - TransparentFX
