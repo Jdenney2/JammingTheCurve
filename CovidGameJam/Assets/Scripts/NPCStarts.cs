@@ -31,33 +31,11 @@ public class NPCStarts : MonoBehaviour
     
     //Refernce used to allow the payer to target NPC's head with as little work as possible
     public Transform head;
-    
-    //Reference used to iterate through all other NPCs when measuring distance. BAD!
-    public NpcArray npcArray;
-
+        
     // Start is called before the first frame update
     void Start()
     {
-        calcuateDefense();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //check the distance between this object and other npcs. If that distance breaks social distanceing,
-        //lower both entities defense.
-        
-        //Note: THIS IS A REALLY DUMB WAY TO DO THIS, but sadly the ony way I could get it to work(thanks to onTrigger() methods requiring a rigidbody)
-        //If we continue work on this, this method NEEDS to be overhauled ASAP
-
-        for (int i = 0; i < npcArray.NPCs.Length; i++) {
-            GameObject target = npcArray.NPCs[i];
-
-            if(Vector3.Distance(transform.position, target.transform.position) < 4.5) {
-                defense -= socialDistancingDamageRate * Time.deltaTime;
-            }
-        }
-
+        calcuateDefense();          
     }
 
     public void calcuateDefense() {
@@ -68,13 +46,19 @@ public class NPCStarts : MonoBehaviour
         */
 
         if (hasMask) {
-            defense = 10f;
+            defense = 6f;
         }
         else {
-            defense = 4f;
+            defense = 2f;
         }
     }
 
-    
+    private void OnTriggerStay(Collider other)
+    {
+        if(other.tag == "NPC")
+        {
+            defense -= socialDistancingDamageRate * Time.deltaTime;
+        }
+    }
 
 }

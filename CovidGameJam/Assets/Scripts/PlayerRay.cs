@@ -21,6 +21,10 @@ public class PlayerRay : MonoBehaviour
             {
                 shieldStr.text = hit.collider.GetComponent<NPCStarts>().defense.ToString();
             }
+            else
+            {
+                shieldStr.text = "";
+            }
         }
 
     }
