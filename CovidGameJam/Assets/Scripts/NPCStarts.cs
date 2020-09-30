@@ -17,14 +17,23 @@ public class NPCStarts : MonoBehaviour
     measures, but for the sake of gameplay, should never be reduced to 0 unless the player attacks the target.
     */
 
-    public int defense;
+    public float defense;
 
     //Values used to calculate the defense of the NPC
     public bool hasMask;
 
+    /*
+    Important note: The following variable is used to calculate how much risk is added when social distancing is broken
+    (modeled by reducing the defense stat of the npc.) This number needs to be tuned to match the actual effects that 
+    breaking social distancing would cause, but for now, this is purely a placeholder value
+    */
+    public float socialDistancingDamageRate = 0.05f;
     
     //Refernce used to allow the payer to target NPC's head with as little work as possible
     public Transform head;
+    
+    //Reference used to iterate through all other NPCs when measuring distance. BAD!
+    public NpcArray npcArray;
 
     // Start is called before the first frame update
     void Start()
@@ -35,7 +44,20 @@ public class NPCStarts : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //check the distance between this object and other npcs. If that distance breaks social distanceing,
+        //lower both entities defense.
         
+        //Note: THIS IS A REALLY DUMB WAY TO DO THIS, but sadly the ony way I could get it to work(thanks to onTrigger() methods requiring a rigidbody)
+        //If we continue work on this, this method NEEDS to be overhauled ASAP
+
+        for (int i = 0; i < npcArray.NPCs.Length; i++) {
+            GameObject target = npcArray.NPCs[i];
+
+            if(Vector3.Distance(transform.position, target.transform.position) < 4.5) {
+                defense -= socialDistancingDamageRate * Time.deltaTime;
+            }
+        }
+
     }
 
     public void calcuateDefense() {
@@ -46,11 +68,13 @@ public class NPCStarts : MonoBehaviour
         */
 
         if (hasMask) {
-            defense = 10;
+            defense = 10f;
         }
         else {
-            defense = 4;
+            defense = 4f;
         }
     }
+
+    
 
 }
