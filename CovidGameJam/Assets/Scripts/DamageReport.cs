@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class DamageReport : MonoBehaviour
 {   
-    public Text title, peopleInfected, objects_with_covid;
-    private int PI = 0, OWC = 0; //peopleInfected and objects with covid
+    public Text title, peopleInfected, objects_with_covid, totalPoints;
+    private int PI = 0, TP = 0, TO = 0, OWC = 0; //peopleInfected, total ppl, total objects, objects with covid
 
     // Start is called before the first frame update
     void Start()
@@ -14,6 +14,7 @@ public class DamageReport : MonoBehaviour
         title.text = "";
         peopleInfected.text = "";
         objects_with_covid.text = "";
+        totalPoints.text = "";
     }
 
     public void ShowResults()
@@ -22,8 +23,11 @@ public class DamageReport : MonoBehaviour
         CalculatePeople();
 
         title.text = "Report";
-        peopleInfected.text = "People Infected :\n" + PI;
-        objects_with_covid.text = "Objects with Covid:\n" + OWC;
+        peopleInfected.text = "People Infected :\n" + PI + "/" + TP;
+        objects_with_covid.text = "Objects with Covid:\n" + OWC + "/" + TO;
+        int total = (PI * 10) + (OWC * 5);
+
+        totalPoints.text = "Total points for infection: " + PI + " x 10 " + " + " + OWC + " x 5\n\n" + total + " points";
     }
 
     private void CalculatePeople()
@@ -31,6 +35,7 @@ public class DamageReport : MonoBehaviour
         GameObject[] objs;
 
         objs = GameObject.FindGameObjectsWithTag("NPC");
+        TP = objs.Length;
 
         foreach(GameObject go in objs)
         {
@@ -45,11 +50,12 @@ public class DamageReport : MonoBehaviour
     {
         GameObject[] objs;
 
-        objs = GameObject.FindGameObjectsWithTag("Object");
+        objs = GameObject.FindGameObjectsWithTag("NonNPC");
+        TO = objs.Length;
 
         foreach(GameObject go in objs)
         {
-            if(go.GetComponent<InfectionSwitch>().infected == true)
+            if(go.GetComponent<InfectionSwitch>().infected== true)
             {
                 OWC++;
             }

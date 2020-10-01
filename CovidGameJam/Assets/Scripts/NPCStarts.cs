@@ -46,7 +46,7 @@ public class NPCStarts : MonoBehaviour
         */
 
         if (hasMask) {
-            defense = 6f;
+            defense = 4f;
         }
         else {
             defense = 2f;

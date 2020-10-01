@@ -13,7 +13,7 @@ public class GameTimer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        text = this.GetComponent<Text>();
+        text = GetComponent<Text>();
     }
 
     // Update is called once per frame

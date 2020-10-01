@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     public CharacterController controller;
     public Transform cam;
     private Transform playerPos;
+    private GameObject closest;
     public float speed = 6f;
     public float gravity = -9.8f;
     public float jumpHeight = 8f;
@@ -16,9 +17,6 @@ public class PlayerMovement : MonoBehaviour
     float turnSmoothVeloctiy;
     Vector3 velocity;
 
-    //player animation variables
-    //public Animator animator;
-    //private bool isIdle, isRunning, isJumping, isBacking, isAttacking, canDoubleJump, canAttack, isDoubleJumping, pause = false;
     private bool pause = false, isAttacking = false;
     //attack cooldown so the player cant spam attack animation
     private float attackCooldown;
@@ -40,13 +38,14 @@ public class PlayerMovement : MonoBehaviour
             //this resets velocity so it is not always adding up in the background
             if(controller.isGrounded)
             {
-                //controller.transform.position = Vector3.zero;               
+                controller.transform.position = Vector3.zero;               
 
                 velocity.y = -2f;
             }
                 
-            if(direction.magnitude >= 0.1f && isAttacking == false)
+            if(direction.magnitude >= 0.1f)
             {
+
                 //target angle takes the x and z axis to get a y angle of movement
                 //this is how we move diagonally
                 float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
@@ -65,16 +64,11 @@ public class PlayerMovement : MonoBehaviour
                     velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
                 }
             }
-            
+
             //this is our gravity
             //note needs to be after jump 
             velocity.y += gravity * Time.deltaTime;
             controller.Move(velocity * Time.deltaTime);
-
-        }
-       
-        else if(pause)
-        {
 
         }
 
@@ -94,5 +88,27 @@ public class PlayerMovement : MonoBehaviour
     public void Unpause()
     {
         pause = false;
+    }
+
+    public GameObject FindClosestEnemy()
+    {
+        GameObject[] enemies;
+        enemies = GameObject.FindGameObjectsWithTag("NPC");
+        GameObject closest = null;
+        float distance = Mathf.Infinity;
+        Vector3 position = transform.position;
+
+        foreach(GameObject go in enemies)
+        {
+            Vector3 diff = go.transform.position - position;
+            float curDistance = diff.sqrMagnitude;
+            if(curDistance < distance)
+            {
+                closest = go;
+                distance = curDistance;
+            }
+        }
+
+        return closest;
     }
 }

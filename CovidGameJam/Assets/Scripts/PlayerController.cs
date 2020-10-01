@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviour
             //If distance is below a certain threshold, damage the targets defense then begin to bounce backwards
             //Note: May have to tinker with the threshold value
             if (Vector3.Distance(transform.position, target.GetComponent<NPCStarts>().head.position) <= 0.7) {
-                target.GetComponent<NPCStarts>().defense -= 1f;
+                target.GetComponent<NPCStarts>().defense -= 1.5f;
                 if(target.GetComponent<NPCStarts>().defense <= 0f) {
                     target.GetComponent<NPCStarts>().isInfected = true;
                 }
