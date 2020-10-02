@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AirCurrent : MonoBehaviour
 {
-    public float gravityValue, min, max, seconds;
+    public float min, max, seconds;
     private float t = 0.5f;
     public bool up, outX, outZ, D; //D = direction if true then forward if false then backward
     private bool moveUp, outwardZ, outwardX; //x and z are their own axis F = forward B = backward
@@ -25,7 +25,7 @@ public class AirCurrent : MonoBehaviour
         
         if(moveUp)
         {
-            StartCoroutine(Delay());
+           StartCoroutine(Delay());
 
             script.TurnGravity();
 
@@ -49,25 +49,31 @@ public class AirCurrent : MonoBehaviour
         if(other.tag =="Player" && up == true)
         {
             playerVelocity.y = 0.0f;
+            playerVelocity.x = 0.0f;
+            playerVelocity.z = 0.0f;
             moveUp = true;
         }
 
         if(other.tag =="Player" && outZ == true)
         {
             playerVelocity.y = 0.0f;
+            playerVelocity.x = 0.0f;
+            playerVelocity.z = 0.0f;
             outwardZ = true;
         }
 
         if(other.tag =="Player" && outX == true)
         {
             playerVelocity.y = 0.0f;
+            playerVelocity.x = 0.0f;
+            playerVelocity.z = 0.0f;
             outwardX = true;
         }
     }
 
     private void LaunchZ()
     {
-        StartCoroutine(Delay());
+       StartCoroutine(Delay());
 
         //launch forward along z axis
         if(D)
@@ -108,11 +114,8 @@ public class AirCurrent : MonoBehaviour
         outwardZ = false;
         outwardX = false;
 
-        // //reset everything so player can ride current again
+        //reset everything so player can ride current again
          t = 0.5f;
-        // float temp;
-        // temp = min;
-        // min = max;
-        // max = temp;
+
     }
 }
