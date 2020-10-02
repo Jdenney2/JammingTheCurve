@@ -17,6 +17,7 @@ public class GameTimer : MonoBehaviour
     {
         text = GetComponent<Text>();
         npcs = GameObject.FindGameObjectsWithTag("NPC");
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
@@ -29,7 +30,8 @@ public class GameTimer : MonoBehaviour
             timeUp = true;
             damageReport.ShowResults();
             player.canMove = false;
-            
+            Cursor.lockState = CursorLockMode.None;
+
             for(int i = 0; i < npcs.Length; i++){
                 npcs[i].GetComponent<NPCMove>().stationary = true;
             }
