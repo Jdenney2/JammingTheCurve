@@ -19,10 +19,13 @@ public class PlayerController : MonoBehaviour
     //Logic variables
     private bool isGrounded, gravityOn;
     private bool isAttacking;
+    public bool canMove;
 
     //References
     public GameObject pivotPoint;
     private GameObject target = null;
+    public AudioClip jump, rebound, cough;
+    private AudioSource audioSource;
 
     //Components
     private CharacterController charController;
@@ -39,11 +42,13 @@ public class PlayerController : MonoBehaviour
         moveDirY = 0;
         isAttacking = false;
         curReboundTimer = 0;
+        canMove = true;
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
     {        
-        if(charController.isGrounded)
+        if(charController.isGrounded && canMove)
             gravityOn = true;
         else
             gravityOn = false;
@@ -52,68 +57,73 @@ public class PlayerController : MonoBehaviour
             moveDirY = -9f;
 
         //Handle Camera Vertical Rotation
-        cameraAngle += -Input.GetAxis("Mouse Y") * rotateSpeed;
-        cameraAngle = Mathf.Clamp(cameraAngle, -maxCameraRotation, maxCameraRotation);
-        pivotPoint.transform.localRotation = Quaternion.AngleAxis(cameraAngle, Vector3.right);
+        if (canMove) {
+            cameraAngle += -Input.GetAxis("Mouse Y") * rotateSpeed;
+            cameraAngle = Mathf.Clamp(cameraAngle, -maxCameraRotation, maxCameraRotation);
+            pivotPoint.transform.localRotation = Quaternion.AngleAxis(cameraAngle, Vector3.right);
 
-        if (!isAttacking && curReboundTimer <= 0) {
-            //Handle Player Horizontal Rotation
-            transform.Rotate(0, Input.GetAxis("Mouse X") * rotateSpeed, 0);
+            if (!isAttacking && curReboundTimer <= 0) {
+                //Handle Player Horizontal Rotation
+                transform.Rotate(0, Input.GetAxis("Mouse X") * rotateSpeed, 0);
 
-            //Handle Character Movement
-            moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-            moveDirection *= speed;
+                //Handle Character Movement
+                moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+                moveDirection *= speed;
 
-            if (charController.isGrounded  && Input.GetButtonDown("Jump")) {
-                moveDirY = jumpSpeed;
-            }
-
-            moveDirection = transform.TransformDirection(moveDirection);
-            moveDirY -= gravity * Time.deltaTime;
-            moveDirection.y = moveDirY;
-
-            charController.Move(moveDirection * Time.deltaTime);
-
-            //If the player hits the attack button, has a target, and can attack, then handle that here
-            if(Input.GetButtonDown("Fire1") && target != null) {
-                oldRotation = transform.rotation;
-                isAttacking = true;
-            }
-        }
-
-        if (isAttacking) {
-            transform.LookAt(target.GetComponent<NPCStarts>().head);
-
-            moveDirection = new Vector3(0, 0, 1);
-            moveDirection = transform.TransformDirection(moveDirection);
-            moveDirection *= atkSpeed;
-
-            charController.Move(moveDirection * Time.deltaTime);
-
-            //If distance is below a certain threshold, damage the targets defense then begin to bounce backwards
-            //Note: May have to tinker with the threshold value
-            if (Vector3.Distance(transform.position, target.GetComponent<NPCStarts>().head.position) <= 0.7) {
-                target.GetComponent<NPCStarts>().defense -= 1.5f;
-                if(target.GetComponent<NPCStarts>().defense <= 0f) {
-                    target.GetComponent<NPCStarts>().isInfected = true;
+                if (charController.isGrounded  && Input.GetButtonDown("Jump")) {
+                    moveDirY = jumpSpeed;
+                    audioSource.PlayOneShot(jump);
                 }
 
-                isAttacking = false;
-                curReboundTimer = reboundTime;
+                moveDirection = transform.TransformDirection(moveDirection);
+                moveDirY -= gravity * Time.deltaTime;
+                moveDirection.y = moveDirY;
+
+                charController.Move(moveDirection * Time.deltaTime);
+
+                //If the player hits the attack button, has a target, and can attack, then handle that here
+                if(Input.GetButtonDown("Fire1") && target != null) {
+                    oldRotation = transform.rotation;
+                    isAttacking = true;
+                }
             }
-        }
 
-        if (curReboundTimer > 0) {
-            moveDirection = new Vector3(0, 0, -1);
-            moveDirection = transform.TransformDirection(moveDirection);
-            moveDirection *= atkSpeed;
+            if (isAttacking) {
+                transform.LookAt(target.GetComponent<NPCStarts>().head);
 
-            charController.Move(moveDirection * Time.deltaTime);
-            curReboundTimer -= Time.deltaTime;
+                moveDirection = new Vector3(0, 0, 1);
+                moveDirection = transform.TransformDirection(moveDirection);
+                moveDirection *= atkSpeed;
 
-            if (curReboundTimer <= 0) {
-                //When done rebounding, reset the rotation
-                transform.rotation = oldRotation;
+                charController.Move(moveDirection * Time.deltaTime);
+
+                //If distance is below a certain threshold, damage the targets defense then begin to bounce backwards
+                //Note: May have to tinker with the threshold value
+                if (Vector3.Distance(transform.position, target.GetComponent<NPCStarts>().head.position) <= 0.7) {
+                    target.GetComponent<NPCStarts>().defense -= 1.5f;
+                    if(target.GetComponent<NPCStarts>().defense <= 0f) {
+                        target.GetComponent<NPCStarts>().isInfected = true;
+                        audioSource.PlayOneShot(cough);
+                    }
+
+                    isAttacking = false;
+                    curReboundTimer = reboundTime;
+                    audioSource.PlayOneShot(rebound);
+                }
+            }
+
+            if (curReboundTimer > 0) {
+                moveDirection = new Vector3(0, 0, -1);
+                moveDirection = transform.TransformDirection(moveDirection);
+                moveDirection *= atkSpeed;
+
+                charController.Move(moveDirection * Time.deltaTime);
+                curReboundTimer -= Time.deltaTime;
+
+                if (curReboundTimer <= 0) {
+                    //When done rebounding, reset the rotation
+                    transform.rotation = oldRotation;
+                }
             }
         }
 
