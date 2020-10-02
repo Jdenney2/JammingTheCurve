@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
     //References
     public GameObject pivotPoint;
     private GameObject target = null;
-    public AudioClip jump, rebound, cough;
+    public AudioClip jump, rebound, cough, bgm;
     private AudioSource audioSource;
 
     //Components
