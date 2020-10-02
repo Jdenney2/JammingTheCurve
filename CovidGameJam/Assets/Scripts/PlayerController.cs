@@ -50,11 +50,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {        
         if(charController.isGrounded && canMove)
-            gravityOn = true;
-        else
-            gravityOn = false;
-
-        if(gravityOn)
             moveDirY = -9f;
 
         //Handle Camera Vertical Rotation
@@ -128,15 +123,15 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        else {
-            if(Input.GetButtonDown("Submit")) {
-                SceneManager.LoadScene("MainScene");
-            }
-        }
+        // else {
+        //     if(Input.GetButtonDown("Submit")) {
+        //         SceneManager.LoadScene("MainScene");
+        //     }
+        // }
 
-        if(Input.GetButtonDown("Cancel")) {
-                Application.Quit();
-            }
+        // if(Input.GetButtonDown("Cancel")) {
+        //         Application.Quit();
+        // }
 
     }
 

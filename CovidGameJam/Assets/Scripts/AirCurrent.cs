@@ -22,17 +22,15 @@ public class AirCurrent : MonoBehaviour
 
     void Update()
     {
-        
+
         if(moveUp)
         {
-           StartCoroutine(Delay());
-
-            script.TurnGravity();
-
+            script.canMove = false;
+            StartCoroutine(Delay());
             playerVelocity.y += Mathf.Lerp(min, max, t);
-            t += 0.5f * Time.deltaTime;
+            t += 0.5f /* Time.deltaTime*/;
 
-            controller.Move(playerVelocity * Time.deltaTime);
+            controller.Move(playerVelocity * Time.deltaTime );
         }
 
         if(outwardZ)
@@ -109,7 +107,9 @@ public class AirCurrent : MonoBehaviour
 
     private IEnumerator Delay()
     {
+        
         yield return new WaitForSeconds(seconds);
+        script.canMove = true;
         moveUp = false;
         outwardZ = false;
         outwardX = false;
